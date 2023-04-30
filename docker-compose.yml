@@ -1,15 +1,34 @@
 version: "3.9"
 services:
+  room-web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: room-web-server
+    container_name: room-web-server
+    ports:
+      - "8000:8000"
+    environment:
+      PASSWORD_SALT: ${PASSWORD_SALT}
+      JWT_SECRET: ${JWT_SECRET}
+      POSTGRES_HOST: local-db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      GIN_MODE: debug
+    depends_on:
+      local-db:
+        condition: service_started
   local-db:
     image: postgres:latest
     restart: always
     container_name: local-room-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: local_room_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5455:5432"
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 volumes:

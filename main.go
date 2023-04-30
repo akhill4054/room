@@ -17,5 +17,5 @@ func main() {
 		c.Status(http.StatusOK)
 	})
 
-	router.Run("127.0.0.1:8000")
+	router.Run("0.0.0.0:8000")
 }
