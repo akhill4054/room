@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  local-db:
+    image: postgres:latest
+    restart: always
+    container_name: local-room-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: local_room_db
+    ports:
+      - "5455:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
