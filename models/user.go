@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/akhill4054/room-backend/pkg/util"
 	"gorm.io/gorm"
@@ -105,11 +104,6 @@ func CreateUser(username string, email string, password string) (*User, error) {
 		if err != nil {
 			panic(err)
 		}
-
-		fmt.Println("**** id:")
-		var c int64
-		tx.Where("id = ?", user.ID).Model(&User{}).Count(&c)
-		fmt.Println(user.ID, c)
 
 		passwordRecord := Password{
 			UID:      user.ID,
