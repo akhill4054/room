@@ -28,7 +28,7 @@ func SetupDB() {
 
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Password{})
-	// db.AutoMigrate(&UserProfile{})
+	db.AutoMigrate(&UserProfile{})
 	// db.AutoMigrate(&models.Room{})
 	// db.AutoMigrate(&models.Message{})
 }

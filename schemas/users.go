@@ -19,11 +19,13 @@ type UpdateUserProfileSchema struct {
 }
 
 type UserProfileSchema struct {
-	ID     int    `json:"id" binding:"required"`
-	UID    int    `json:"uid" binding:"required"`
-	Name   string `json:"name" binding:"required"`
-	Bio    string `json:"bio,omitempty"`
-	PicUrl string `json:"pic_url,omitempty"`
+	ID       int    `json:"id" binding:"required"`
+	UID      int    `json:"uid" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	Bio      string `json:"bio,omitempty"`
+	PicUrl   string `json:"pic_url,omitempty"`
 }
 
 type DeleteUserResponseSchema struct {
