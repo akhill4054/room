@@ -15,7 +15,8 @@ type User struct {
 	gorm.Model
 	ID       int    `gorm:"primaryKey;autoIncrement:true"`
 	Username string `gorm:"unique;index;not null;default:null"`
-	Email    string `gorm:"unique;not null;default:null"`
+	Email    string `gorm:"unique;index;not null;default:null"`
+	IsAdmin  bool   `gorm:"index;not null;default:false"`
 }
 
 func (User) TableName() string {
@@ -27,7 +28,7 @@ type Password struct {
 	ID       int    `gorm:"primaryKey;autoIncrement:true;"`
 	UID      int    `gorm:"not null;unique;index;default:null;"`
 	Password string `gorm:"not null;default:null;"`
-	User     User   `gorm:"foreignKey:UID;constraint:OnDelete:SET NULL;not null;"`
+	User     User   `gorm:"foreignKey:UID;references:ID;constraint:OnDelete:SET NULL;not null;"`
 }
 
 func GetUser(id int) (*User, error) {

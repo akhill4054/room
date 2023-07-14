@@ -10,7 +10,7 @@ import (
 )
 
 func GetUser(c *gin.Context) {
-	userId, err := strconv.Atoi(c.Param("id"))
+	userId, err := strconv.Atoi(c.Param("userId"))
 
 	if err != nil {
 		response := schemas.ErrorResponse{Message: "Invalid user id"}

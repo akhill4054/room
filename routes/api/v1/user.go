@@ -6,5 +6,5 @@ import (
 )
 
 func RegisterUserRoutes(g *gin.RouterGroup) {
-	g.GET("/users/:id", controllers.GetUser)
+	g.GET("/users/:userId", controllers.GetUser)
 }
