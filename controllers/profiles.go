@@ -41,18 +41,13 @@ func CreateProfile(c *gin.Context) {
 func GetUserProfile(c *gin.Context) {
 	queryUid := c.Query("uid")
 	if queryUid == "" {
-		c.IndentedJSON(
-			http.StatusBadRequest,
-			schemas.ErrorResponse{Message: "Missing required query param 'uid'"},
-		)
+		c.IndentedJSON(http.StatusBadRequest, schemas.ErrorResponse{Message: "Missing required query param 'uid'"})
 		return
 	}
 
 	uid, err := strconv.Atoi(c.Query("uid"))
 	if err != nil {
-		c.IndentedJSON(
-			http.StatusBadRequest, schemas.ErrorResponse{Message: "Invalid user id"},
-		)
+		c.IndentedJSON(http.StatusBadRequest, schemas.ErrorResponse{Message: "Invalid user id"})
 		return
 	}
 
