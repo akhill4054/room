@@ -38,7 +38,7 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 					}
 				} else {
 					user, _ := models.GetUserWithClaims(
-						claims.UID, claims.Username,
+						claims.Uid, claims.Username,
 					)
 					if user != nil {
 						code = e.SUCCESS

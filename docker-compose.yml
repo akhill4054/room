@@ -1,11 +1,11 @@
 version: "3.9"
 services:
-  room-web-server:
+  room-webserver:
     build:
       context: .
       dockerfile: Dockerfile
-    image: room-web-server
-    container_name: room-web-server
+    image: room-webserver:latest
+    container_name: room-webserver
     ports:
       - "8000:8000"
     environment:
@@ -16,6 +16,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       GIN_MODE: debug
+    working_dir: /usr/src/project
+    entrypoint: ["gowatch"]
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src/project
     depends_on:
       local-db:
         condition: service_started
@@ -30,7 +36,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db:/var/lib/postgresql/data
+      - local-room-db:/var/lib/postgresql/data
 volumes:
-  db:
+  local-room-db:
     driver: local

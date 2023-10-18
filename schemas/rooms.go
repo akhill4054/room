@@ -1,6 +1,10 @@
 package schemas
 
-import "time"
+import (
+	"time"
+
+	"github.com/akhill4054/room-backend/models"
+)
 
 type CreateRoomRequestSchema struct {
 	Name        string `json:"name" binding:"required"`
@@ -10,7 +14,7 @@ type CreateRoomRequestSchema struct {
 }
 
 type RoomSchema struct {
-	ID          int       `json:"id" binding:"required"`
+	Id          int       `json:"id" binding:"required"`
 	Name        string    `json:"name" binding:"required"`
 	Description string    `json:"description"`
 	IsPrivate   bool      `json:"is_private" binding:"required"`
@@ -20,7 +24,7 @@ type RoomSchema struct {
 }
 
 type RoomOwner struct {
-	UID      int    `json:"uid" binding:"required"`
+	Uid      int    `json:"uid" binding:"required"`
 	Username string `json:"username" binding:"required"`
 }
 
@@ -36,6 +40,23 @@ type UpdateRoomResponse struct {
 	CreateRoomRequestSchema
 }
 
+type CreateRoomMemberRequest struct {
+	MemberUid int                   `json:"member_uid" binding:"required"`
+	Role      models.RoomMemberRole `json:"role" binding:"required"`
+}
+
+type CreateRoomMemberResponse struct {
+	Message string `json:"message" binding:"required"`
+}
+
+type JoinRoomResponse struct {
+	Message string `json:"message" binding:"required"`
+}
+
 type DeleteRoomResponse struct {
+	Message string `json:"message" binding:"required"`
+}
+
+type DeleteRoomMemberResponse struct {
 	Message string `json:"message" binding:"required"`
 }

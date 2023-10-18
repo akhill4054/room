@@ -18,6 +18,13 @@ func GetUser(c *gin.Context) {
 		return
 	}
 
+	currUser := c.Keys["user"].(*models.User)
+	if !currUser.IsAdmin {
+		response := schemas.ErrorResponse{Message: "User not authorized to perform this action"}
+		c.IndentedJSON(http.StatusUnauthorized, response)
+		return
+	}
+
 	user, err := models.GetUser(userId)
 
 	if err != nil {
@@ -30,9 +37,10 @@ func GetUser(c *gin.Context) {
 	}
 
 	response := schemas.UserScheama{
-		ID:       user.ID,
+		Id:       user.Id,
 		Username: user.Username,
 		Email:    user.Email,
+		IsAdmin:  user.IsAdmin,
 	}
 	c.IndentedJSON(http.StatusOK, response)
 }

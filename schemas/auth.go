@@ -4,6 +4,7 @@ type SignUpRequestSchema struct {
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	IsAdmin  bool   `json:"is_amdin"`
 }
 
 type LoginRequestSchema struct {

@@ -22,7 +22,7 @@ func CreateProfile(c *gin.Context) {
 	}
 
 	profile, err := models.CreateUserProfile(
-		user.ID,
+		user.Id,
 		reqBody.Name,
 		reqBody.Bio,
 		reqBody.PicUrl,
@@ -76,7 +76,7 @@ func UpdateUserProfile(c *gin.Context) {
 	}
 
 	profile, err := models.UpdateUserProfile(
-		user.ID,
+		user.Id,
 		reqBody.Name,
 		reqBody.Bio,
 		reqBody.PicUrl,
@@ -94,10 +94,10 @@ func UpdateUserProfile(c *gin.Context) {
 
 func asUserProfileSchema(profile *models.UserProfile) *schemas.UserProfileSchema {
 	return &schemas.UserProfileSchema{
-		ID:       profile.ID,
+		Id:       profile.Id,
 		Username: profile.User.Username,
 		Email:    profile.User.Email,
-		UID:      profile.UID,
+		Uid:      profile.Uid,
 		Name:     profile.Name,
 		Bio:      profile.Bio,
 		PicUrl:   profile.PicUrl,

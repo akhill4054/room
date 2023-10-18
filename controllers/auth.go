@@ -22,6 +22,7 @@ func SignUp(c *gin.Context) {
 		reqBody.Username,
 		reqBody.Email,
 		reqBody.Password,
+		reqBody.IsAdmin,
 	)
 
 	if err != nil {
@@ -34,7 +35,7 @@ func SignUp(c *gin.Context) {
 	}
 
 	response := schemas.UserScheama{
-		ID:       user.ID,
+		Id:       user.Id,
 		Username: user.Username,
 		Email:    user.Email,
 	}
@@ -62,7 +63,7 @@ func Login(c *gin.Context) {
 	}
 
 	token, err := models.GetAuthenticationToken(
-		user.ID, reqBody.Username, reqBody.Password,
+		user.Id, reqBody.Username, reqBody.Password,
 	)
 	if err != nil {
 		c.IndentedJSON(

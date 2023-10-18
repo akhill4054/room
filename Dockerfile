@@ -11,8 +11,10 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o /room-web-server
+RUN go build -o /bin/room-webserver
+
+RUN go install github.com/silenceper/gowatch@latest
 
 EXPOSE $PORT
 
-ENTRYPOINT ["/room-web-server"]
+ENTRYPOINT ["/bin/room-webserver"]

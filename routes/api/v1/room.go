@@ -11,4 +11,7 @@ func RegisterRoomRoutes(g *gin.RouterGroup) {
 	g.GET("/rooms/:roomId", controllers.GetRoom)
 	g.PUT("/rooms/:roomId", controllers.UpdateRoom)
 	g.DELETE("/rooms/:roomId", controllers.DeleteRoom)
+
+	g.POST("/rooms/:roomId/members", controllers.CreateRoomMember)
+	g.DELETE("/rooms/:roomId/members/:memberId", controllers.DeleteRoomMember)
 }

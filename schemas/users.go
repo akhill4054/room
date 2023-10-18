@@ -1,9 +1,10 @@
 package schemas
 
 type UserScheama struct {
-	ID       int    `json:"id" binding:"required"`
+	Id       int    `json:"id" binding:"required"`
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
+	IsAdmin  bool   `json:"is_amdin" binding:"required"`
 }
 
 type CreateUserProfileSchema struct {
@@ -19,8 +20,8 @@ type UpdateUserProfileSchema struct {
 }
 
 type UserProfileSchema struct {
-	ID       int    `json:"id" binding:"required"`
-	UID      int    `json:"uid" binding:"required"`
+	Id       int    `json:"id" binding:"required"`
+	Uid      int    `json:"uid" binding:"required"`
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Name     string `json:"name" binding:"required"`

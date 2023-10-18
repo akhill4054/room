@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,7 +12,7 @@ import (
 )
 
 func CreateRoom(c *gin.Context) {
-	uid := c.Keys["user"].(*models.User).ID
+	uid := c.Keys["user"].(*models.User).Id
 
 	var reqBody schemas.CreateRoomRequestSchema
 
@@ -57,11 +58,18 @@ func GetRooms(c *gin.Context) {
 	user := c.Keys["user"].(*models.User)
 
 	ownerUid := c.Query("ouid")
+	isShowOnlyJoined, _ := strconv.ParseBool(c.Query("is_only_joined"))
 
-	size, _ := strconv.Atoi(c.DefaultQuery("size", "10"))
+	size, _ := strconv.Atoi(c.DefaultQuery("size", "20"))
 	after, _ := strconv.Atoi(c.DefaultQuery("after", "0"))
 
-	rooms, err := models.GetRooms(user, ownerUid, size, after)
+	rooms, err := models.GetRooms(
+		user,
+		ownerUid,
+		isShowOnlyJoined,
+		size,
+		after,
+	)
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, schemas.ErrorResponse{Message: err.Error()})
 		return
@@ -71,6 +79,8 @@ func GetRooms(c *gin.Context) {
 }
 
 func UpdateRoom(c *gin.Context) {
+	user := c.Keys["user"].(*models.User)
+
 	var reqBody schemas.UpdateRoomResponse
 
 	if err := c.BindJSON(&reqBody); err != nil {
@@ -91,6 +101,11 @@ func UpdateRoom(c *gin.Context) {
 		return
 	}
 
+	if !user.IsAdmin || room.OwnerUid != user.Id {
+		c.IndentedJSON(http.StatusBadRequest, schemas.ErrorResponse{Message: "Update action not allowed"})
+		return
+	}
+
 	room.Name = reqBody.Name
 	room.PicUrl = reqBody.PicUrl
 	room.Description = reqBody.Description
@@ -99,6 +114,59 @@ func UpdateRoom(c *gin.Context) {
 	room, err = room.Update()
 
 	c.IndentedJSON(http.StatusOK, asRoomSchema(room))
+}
+
+func DeleteRoomMember(c *gin.Context) {
+	user := c.Keys["user"].(*models.User)
+
+	roomId, err := strconv.Atoi(c.Param("roomId"))
+	if err != nil {
+		response := schemas.ErrorResponse{Message: "Not a valid member id"}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+
+	memberId, err := strconv.Atoi(c.Param("memberId"))
+	if err != nil {
+		response := schemas.ErrorResponse{Message: "Not a valid member id"}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+
+	if err := models.DeleteRoomMember(user, roomId, memberId); err != nil {
+		response := schemas.ErrorResponse{Message: err.Error()}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := schemas.DeleteRoomMemberResponse{Message: fmt.Sprintf("Room member uid: %d removed from room room_id: %d", memberId, roomId)}
+	c.IndentedJSON(http.StatusBadRequest, response)
+}
+
+func CreateRoomMember(c *gin.Context) {
+	user := c.Keys["user"].(*models.User)
+
+	var reqBody schemas.CreateRoomMemberRequest
+	if err := c.BindJSON(&reqBody); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, schemas.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	roomId, err := strconv.Atoi(c.Param("roomId"))
+	if err != nil {
+		response := schemas.ErrorResponse{Message: "Invalid room id"}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+
+	if err := models.CreateRoomMember(user, reqBody.MemberUid, roomId, reqBody.Role); err != nil {
+		response := schemas.ErrorResponse{Message: err.Error()}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := schemas.CreateRoomMemberResponse{Message: "User added to room"}
+	c.IndentedJSON(http.StatusBadRequest, response)
 }
 
 func DeleteRoom(c *gin.Context) {
@@ -130,11 +198,11 @@ func DeleteRoom(c *gin.Context) {
 
 func asRoomSchema(room *models.Room) *schemas.RoomSchema {
 	return &schemas.RoomSchema{
-		ID:          room.ID,
+		Id:          room.Id,
 		Name:        room.Name,
 		Description: room.Description,
 		IsPrivate:   room.IsPrivate,
-		OwnerUid:    room.OwnerUID,
+		OwnerUid:    room.OwnerUid,
 		CreatedAt:   room.CreatedAt,
 	}
 }

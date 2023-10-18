@@ -10,7 +10,7 @@ import (
 
 type Claims struct {
 	jwt.RegisteredClaims
-	UID      int    `json:"uid"`
+	Uid      int    `json:"uid"`
 	Username string `json:"username"`
 }
 
@@ -20,7 +20,7 @@ func GenerateToken(uid int, username string) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour * 24 * 30)),
 			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
 		},
-		UID:      uid,
+		Uid:      uid,
 		Username: username,
 	}
 	tokenObj := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

@@ -8,12 +8,12 @@ import (
 
 type UserProfile struct {
 	gorm.Model
-	ID     int    `gorm:"primaryKey;autoIncrement:true;"`
-	UID    int    `gorm:"unique;index;not null;default: null"`
-	Name   string `gorm:"not null;default:null;"`
+	Id     int    `gorm:"primaryKey;autoIncrement:true"`
+	Uid    int    `gorm:"unique;index;not null;default: null"`
+	Name   string `gorm:"not null;default:null"`
 	Bio    string
 	PicUrl string
-	User   User `gorm:"foreignKey:UID;references:ID;constraint:OnDelete:SET NULL;"`
+	User   User `gorm:"foreignKey:Uid;references:Id;constraint:OnDelete:SET NULL"`
 }
 
 func CreateUserProfile(
@@ -31,7 +31,7 @@ func CreateUserProfile(
 	}
 
 	profile := UserProfile{
-		UID:    uid,
+		Uid:    uid,
 		Name:   name,
 		Bio:    bio,
 		PicUrl: picUrl,

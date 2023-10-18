@@ -13,7 +13,7 @@ type Tabler interface {
 
 type User struct {
 	gorm.Model
-	ID       int    `gorm:"primaryKey;autoIncrement:true"`
+	Id       int    `gorm:"primaryKey;autoIncrement:true"`
 	Username string `gorm:"unique;index;not null;default:null"`
 	Email    string `gorm:"unique;index;not null;default:null"`
 	IsAdmin  bool   `gorm:"index;not null;default:false"`
@@ -25,10 +25,10 @@ func (User) TableName() string {
 
 type Password struct {
 	gorm.Model
-	ID       int    `gorm:"primaryKey;autoIncrement:true;"`
-	UID      int    `gorm:"not null;unique;index;default:null;"`
-	Password string `gorm:"not null;default:null;"`
-	User     User   `gorm:"foreignKey:UID;references:ID;constraint:OnDelete:SET NULL;not null;"`
+	Id       int    `gorm:"primaryKey;autoIncrement:true"`
+	Uid      int    `gorm:"not null;unique;index;default:null"`
+	Password string `gorm:"not null;default:null"`
+	User     User   `gorm:"foreignKey:Uid;references:Id;constraint:OnDelete:SET NULL;not null"`
 }
 
 func GetUser(id int) (*User, error) {
@@ -73,10 +73,11 @@ func GetUserByUsername(username string) (*User, error) {
 	return &user, nil
 }
 
-func CreateUser(username string, email string, password string) (*User, error) {
+func CreateUser(username string, email string, password string, isAdmin bool) (*User, error) {
 	user := User{
 		Username: username,
 		Email:    email,
+		IsAdmin:  isAdmin,
 	}
 
 	if len(password) < 8 {
@@ -107,7 +108,7 @@ func CreateUser(username string, email string, password string) (*User, error) {
 		}
 
 		passwordRecord := Password{
-			UID:      user.ID,
+			Uid:      user.Id,
 			Password: string(hashedPassword),
 		}
 		result = tx.Create(&passwordRecord)
