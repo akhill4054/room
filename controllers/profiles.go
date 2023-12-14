@@ -66,6 +66,16 @@ func GetUserProfile(c *gin.Context) {
 func UpdateUserProfile(c *gin.Context) {
 	user := c.Keys["user"].(*models.User)
 
+	type Uri struct {
+		ProfileId int `uri:"profileId" binding:"required"`
+	}
+
+	var uri Uri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		c.JSON(http.StatusBadRequest, schemas.ErrorResponse{Message: err.Error()})
+		return
+	}
+
 	var reqBody schemas.UpdateUserProfileSchema
 
 	if err := c.BindJSON(&reqBody); err != nil {
@@ -76,7 +86,8 @@ func UpdateUserProfile(c *gin.Context) {
 	}
 
 	profile, err := models.UpdateUserProfile(
-		user.Id,
+		user,
+		uri.ProfileId,
 		reqBody.Name,
 		reqBody.Bio,
 		reqBody.PicUrl,

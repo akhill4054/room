@@ -45,25 +45,29 @@ func CreateUserProfile(
 }
 
 func UpdateUserProfile(
-	uid int,
+	user *User,
+	profileId int,
 	name string,
 	bio string,
 	picUrl string,
 ) (*UserProfile, error) {
 	profile := UserProfile{}
-	err := db.Where("uid = ?", uid).Joins("User").First(&profile).Error
-
-	// Update fields
-	profile.Name = name
-	profile.Bio = bio
-	profile.PicUrl = picUrl
-
+	err := db.Where("id = ?", profileId).Joins("User").First(&profile).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, ErrUserProfileDoesNotExist
 		}
 		panic(err)
 	}
+
+	if profile.Uid != user.Id && !user.IsAdmin {
+		return nil, ErrProfileUpdateNotAllowed
+	}
+
+	// Update fields
+	profile.Name = name
+	profile.Bio = bio
+	profile.PicUrl = picUrl
 
 	if err := db.Save(&profile).Error; err != nil {
 		panic(err)
@@ -90,4 +94,5 @@ var (
 	ErrUserProfileAlreadyExists = errors.New("User profile already exists")
 	ErrUserProfileNotFound      = errors.New("User profile not found")
 	ErrUserProfileDoesNotExist  = errors.New("User profile does not exist")
+	ErrProfileUpdateNotAllowed  = errors.New("Profile update not allowed")
 )

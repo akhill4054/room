@@ -18,6 +18,8 @@ func InitRouter() *gin.Engine {
 	v1.RegisterUserRoutes(apiv1)
 	v1.RegisterProifleRoutes(apiv1)
 	v1.RegisterRoomRoutes(apiv1)
+	v1.RegisterChatRoutes(apiv1)
+	v1.RegisterMessageRoutes(apiv1)
 
 	return r
 }

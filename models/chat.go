@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type Chat struct {
 	gorm.Model
-	Id            int  `gorm:"primaryKey;autoIncrement:true"`
-	SenderUid     int  `gorm:"not null;default: null"`
+	Id            int `gorm:"primaryKey;autoIncrement:true"`
+	SenderUid     int
 	SenderUser    User `gorm:"foreignKey:SenderUid;references:Id;constraint:OnDelete:SET NULL"`
-	RecipientUid  int  `gorm:"not null;default: null"`
+	RecipientUid  int
 	RecipientUser User `gorm:"foreignKey:RecipientUid;references:Id;constraint:OnDelete:SET NULL"`
 }

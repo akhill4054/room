@@ -8,5 +8,5 @@ import (
 func RegisterProifleRoutes(g *gin.RouterGroup) {
 	g.POST("/profiles", controllers.CreateProfile)
 	g.GET("/profiles", controllers.GetUserProfile)
-	g.PUT("/profiles", controllers.UpdateUserProfile)
+	g.PUT("/profiles/profileId", controllers.UpdateUserProfile)
 }
