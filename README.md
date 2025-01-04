@@ -1,2 +1,2 @@
 # room
-API server for real-time chat written in Golang
+API server for a real-time chat group-chat service, written in Golang!
